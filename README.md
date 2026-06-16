@@ -62,7 +62,7 @@ Root-level scripts coordinate both backend and frontend development workflows.
 
    ```bash
    git clone <repo-url>
-   cd Shopify
+   cd ProShop
    ```
 
 2. Install root dependencies:

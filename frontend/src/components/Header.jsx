@@ -60,8 +60,8 @@ const Header = () => {
             to='/'
             className='flex items-center space-x-2 text-2xl font-bold text-blue-600 dark:text-blue-400 hover:opacity-80 transition-opacity'
           >
-            <img src={logo} alt='Shopify' className='h-8 w-8' />
-            <span>Shopify</span>
+            <img src={logo} alt='Proshop' className='h-8 w-8' />
+            <span>Proshop</span>
           </Link>
 
           <div className='hidden lg:flex items-center space-x-8'>

@@ -15,10 +15,24 @@ const isMongoConnected = () => mongoose.connection.readyState === 1;
 
 const getPageSize = () => Number(process.env.PAGINATION_LIMIT) || 24;
 
+// Helper to sanitize search strings for plurals/boundaries
+const cleanSearchTerm = (term) => {
+  if (!term) return '';
+  let cleaned = term.trim();
+  // Strip trailing 's' for plural terms (e.g., "books" -> "book", "phones" -> "phone")
+  if (cleaned.toLowerCase().endsWith('s') && cleaned.length > 3) {
+    cleaned = cleaned.slice(0, -1);
+  }
+  return cleaned;
+};
+
 const getFallbackProducts = ({ keyword, category, pageNumber }) => {
   const pageSize = getPageSize();
   const page = Number(pageNumber) || 1;
-  const keywordRegex = keyword ? new RegExp(keyword, 'i') : null;
+  
+  const cleanedKeyword = cleanSearchTerm(keyword);
+  // Using word boundary \b to prevent matching "headphones" when searching for "phone"
+  const keywordRegex = cleanedKeyword ? new RegExp(`\\b${cleanedKeyword}`, 'i') : null;
   const categoryRegex = category ? new RegExp(`^${category}$`, 'i') : null;
 
   const filteredProducts = fallbackProducts.filter((product) => {
@@ -59,10 +73,12 @@ const getProducts = asyncHandler(async (req, res) => {
   const pageSize = getPageSize();
   const page = Number(req.query.pageNumber) || 1;
 
-  const keyword = req.query.keyword
+  const cleanedKeyword = cleanSearchTerm(req.query.keyword);
+
+  const keyword = cleanedKeyword
     ? {
         name: {
-          $regex: req.query.keyword,
+          $regex: `\\b${cleanedKeyword}`,
           $options: 'i',
         },
       }
@@ -91,9 +107,6 @@ const getProducts = asyncHandler(async (req, res) => {
 // @route   GET /api/products/:id
 // @access  Public
 const getProductById = asyncHandler(async (req, res) => {
-  // NOTE: checking for valid ObjectId to prevent CastError moved to separate
-  // middleware. See README for more info.
-
   if (!isMongoConnected()) {
     const product = fallbackProducts.find((item) => item._id === req.params.id);
 
@@ -109,8 +122,6 @@ const getProductById = asyncHandler(async (req, res) => {
   if (product) {
     return res.json(product);
   } else {
-    // NOTE: this will run if a valid ObjectId but no product was found
-    // i.e. product may be null
     res.status(404);
     throw new Error('Product not found');
   }

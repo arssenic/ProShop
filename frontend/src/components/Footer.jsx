@@ -112,7 +112,7 @@ const Footer = () => {
         {/* Copyright */}
         <div className='py-6 text-center text-sm text-gray-400'>
           <p>
-            Shopify &copy; {currentYear}. All rights reserved.
+            ProShop &copy; {currentYear}. All rights reserved.
           </p>
         </div>
       </div>

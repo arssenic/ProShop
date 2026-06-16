@@ -1,4 +1,4 @@
-# Shopify
+# ProShop
 
 A full-stack MERN e-commerce application with user authentication, product browsing, cart checkout, order management, and admin dashboards.
 
@@ -20,7 +20,7 @@ A full-stack MERN e-commerce application with user authentication, product brows
 
 ## Overview
 
-This repository contains a Shopify-style e-commerce application built using:
+This repository contains a ProShop-style e-commerce application built using:
 
 - `Node.js` + `Express` for the backend API
 - `MongoDB` with `Mongoose` for data persistence

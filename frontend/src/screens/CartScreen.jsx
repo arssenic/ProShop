@@ -108,14 +108,16 @@ const CartScreen = () => {
           </div>
 
           <button
-            type='button'
+            type="button"
             disabled={cartItems.length === 0}
             onClick={checkoutHandler}
-            className={`btn-primary w-full ${
-              cartItems.length === 0
-                ? 'opacity-50 cursor-not-allowed'
-                : ''
-            }`}
+            className={`w-full h-12 rounded-2xl font-semibold uppercase tracking-wide text-white
+              transition-all duration-300
+              ${
+                cartItems.length === 0
+                  ? 'opacity-50 cursor-not-allowed bg-slate-400'
+                  : 'bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 hover:shadow-lg hover:shadow-slate-900/30'
+              }`}
           >
             Proceed To Checkout
           </button>

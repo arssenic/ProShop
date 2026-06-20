@@ -111,7 +111,7 @@ const CartScreen = () => {
             type="button"
             disabled={cartItems.length === 0}
             onClick={checkoutHandler}
-            className={`w-full h-12 rounded-2xl font-semibold uppercase tracking-wide text-white
+            className={`w-full h-12 rounded-2xl font-semibold uppercase tracking-wide text-sm text-white
               transition-all duration-300
               ${
                 cartItems.length === 0

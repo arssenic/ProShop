@@ -186,65 +186,85 @@ const ProfileScreen = () => {
           <Message>No orders found.</Message>
         ) : (
           <div className="space-y-4">
-            {orders.map((order) => (
-              <div
-                key={order._id}
-                className="rounded-2xl border border-slate-200 dark:border-slate-700 p-4"
-              >
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                  
-                  <div>
-                    <p className="font-semibold">
-                      #{order._id.slice(-8)}
-                    </p>
-
-                    <p className="text-sm text-slate-500">
-                      {order.createdAt.substring(0, 10)}
-                    </p>
-                  </div>
-
-                  <div>
-                    <p className="font-semibold">
-                      ${order.totalPrice.toFixed(2)}
-                    </p>
-                  </div>
-
-                  <div className="flex gap-2 flex-wrap">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium
-                      ${
-                        order.isPaid
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-yellow-100 text-yellow-700'
-                      }`}
-                    >
-                      {order.isPaid ? 'Paid' : 'Pending'}
-                    </span>
-
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium
-                      ${
-                        order.isDelivered
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-yellow-100 text-yellow-700'
-                      }`}
-                    >
-                      {order.isDelivered
-                        ? 'Delivered'
-                        : 'Pending'}
-                    </span>
-                  </div>
-
-                  <Link
-                    to={`/order/${order._id}`}
-                    className="premium-btn-primary px-4 py-2 text-sm h-auto w-auto"
-                  >
-                    Details
-                  </Link>
-                </div>
+              <div className="hidden md:grid md:grid-cols-[1.2fr_0.8fr_1fr_1fr_0.8fr] gap-4 px-6 py-2 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <div>Order ID</div>
+                <div>Total</div>
+                <div>Payment</div>
+                <div>Delivery</div>
+                <div className="text-center">Action</div>
               </div>
-            ))}
-          </div>
+
+              {orders.map((order) => (
+                <div
+                  key={order._id}
+                  className="rounded-2xl border border-slate-200 dark:border-slate-700 p-6"
+                >
+                  <div className="grid md:grid-cols-[1.2fr_0.8fr_1fr_1fr_0.8fr] gap-4 items-center">
+
+                    {/* Order ID */}
+                    <div>
+                      <p className="font-semibold text-lg">
+                        #{order._id.slice(-8)}
+                      </p>
+
+                      <p className="text-sm text-slate-500">
+                        {order.createdAt.substring(0, 10)}
+                      </p>
+                    </div>
+
+                    {/* Total */}
+                    <div className="font-semibold text-lg">
+                      ${order.totalPrice.toFixed(2)}
+                    </div>
+
+                    {/* Payment Status */}
+                    <div>
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium
+                        ${
+                          order.isPaid
+                            ? 'bg-green-100 text-green-700'
+                            : 'bg-yellow-100 text-yellow-700'
+                        }`}
+                      >
+                        {order.isPaid ? 'Paid' : 'Pending'}
+                      </span>
+                    </div>
+
+                    {/* Delivery Status */}
+                    <div>
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium
+                        ${
+                          order.isDelivered
+                            ? 'bg-green-100 text-green-700'
+                            : 'bg-yellow-100 text-yellow-700'
+                        }`}
+                      >
+                        {order.isDelivered
+                          ? 'Delivered'
+                          : 'Pending'}
+                      </span>
+                    </div>
+
+                    {/* Details Button */}
+                    <div className="flex justify-center md:justify-end">
+                      <Link
+                        to={`/order/${order._id}`}
+                        className="w-full md:w-auto h-12 rounded-2xl font-semibold uppercase tracking-wide text-sm text-white
+                        bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950
+                        hover:shadow-lg hover:shadow-slate-900/30
+                        transition-all duration-300
+                        flex items-center justify-center px-6"
+                      >
+                        Details
+                      </Link>
+                    </div>
+
+                  </div>
+                </div>
+              ))}
+            </div>
         )}
       </div>
     </div>

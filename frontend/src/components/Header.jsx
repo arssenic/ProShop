@@ -95,7 +95,7 @@ const Header = () => {
                   Account Profile
                 </NavDropdown.Item>
                 <NavDropdown.Item onClick={logoutHandler}>
-                  Terminate Session
+                  Log Out
                 </NavDropdown.Item>
               </NavDropdown>
             </div>

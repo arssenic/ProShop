@@ -1,12 +1,19 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import Loader from '../components/Loader';
-import FormContainer from '../components/FormContainer';
+import { toast } from 'react-toastify';
 
 import { useRegisterMutation } from '../slices/usersApiSlice';
 import { setCredentials } from '../slices/authSlice';
-import { toast } from 'react-toastify';
+
+import Loader from '../components/Loader';
+
+import {
+  FaUser,
+  FaEnvelope,
+  FaLock,
+  FaUserPlus,
+} from 'react-icons/fa';
 
 const RegisterScreen = () => {
   const [name, setName] = useState('');
@@ -36,100 +43,175 @@ const RegisterScreen = () => {
 
     if (password !== confirmPassword) {
       toast.error('Passwords do not match');
-    } else {
-      try {
-        const res = await register({ name, email, password }).unwrap();
-        dispatch(setCredentials({ ...res }));
-        navigate(redirect);
-      } catch (err) {
-        toast.error(err?.data?.message || err.error);
-      }
+      return;
+    }
+
+    try {
+      const res = await register({
+        name,
+        email,
+        password,
+      }).unwrap();
+
+      dispatch(setCredentials({ ...res }));
+      navigate(redirect);
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
     }
   };
 
   return (
-    <FormContainer>
-      <h1 className='mb-6'>Register</h1>
-      <form onSubmit={submitHandler} className='space-y-4'>
-        <div>
-          <label htmlFor='name' className='block text-sm font-medium mb-2'>
-            Name
-          </label>
-          <input
-            id='name'
-            type='text'
-            placeholder='Enter name'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className='input-field'
-          />
+    <div className='relative flex min-h-[70vh] items-center justify-center px-4 py-12 sm:px-6 lg:px-8 overflow-hidden'>
+      {/* Ambient Glow */}
+      <div className='absolute top-1/4 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none dark:bg-indigo-500/5' />
+
+      <div className='premium-card w-full max-w-md space-y-6 border border-slate-200/60 dark:border-slate-800/60'>
+        {/* Header */}
+        <div className='text-center space-y-2'>
+          <div className='mx-auto flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-600 text-white shadow-md shadow-indigo-500/20'>
+            <FaUserPlus className='text-sm' />
+          </div>
+
+          <h2 className='text-2xl font-bold tracking-tight text-slate-900 dark:text-white'>
+            Create Account
+          </h2>
+
+          <p className='text-xs text-slate-400 dark:text-slate-500'>
+            Register to access your ProShop account
+          </p>
         </div>
 
-        <div>
-          <label htmlFor='email' className='block text-sm font-medium mb-2'>
-            Email Address
-          </label>
-          <input
-            id='email'
-            type='email'
-            placeholder='Enter email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className='input-field'
-          />
-        </div>
+        {/* Form */}
+        <form onSubmit={submitHandler} className='space-y-4'>
+          {/* Name */}
+          <div className='space-y-1.5'>
+            <label
+              htmlFor='name'
+              className='text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500'
+            >
+              Name
+            </label>
 
-        <div>
-          <label htmlFor='password' className='block text-sm font-medium mb-2'>
-            Password
-          </label>
-          <input
-            id='password'
-            type='password'
-            placeholder='Enter password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className='input-field'
-          />
-        </div>
+            <div className='relative flex items-center'>
+              <input
+                id='name'
+                type='text'
+                placeholder='Enter your name'
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                className='premium-input !pl-12'
+              />
 
-        <div>
-          <label htmlFor='confirmPassword' className='block text-sm font-medium mb-2'>
-            Confirm Password
-          </label>
-          <input
-            id='confirmPassword'
-            type='password'
-            placeholder='Confirm password'
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className='input-field'
-          />
-        </div>
+              <FaUser className='absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none' />
+            </div>
+          </div>
 
-        <button
-          disabled={isLoading}
-          type='submit'
-          className='btn-primary w-full'
-        >
-          {isLoading ? 'Registering...' : 'Register'}
-        </button>
+          {/* Email */}
+          <div className='space-y-1.5'>
+            <label
+              htmlFor='email'
+              className='text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500'
+            >
+              Email Address
+            </label>
 
-        {isLoading && <Loader />}
-      </form>
+            <div className='relative flex items-center'>
+              <input
+                id='email'
+                type='email'
+                placeholder='name@example.com'
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className='premium-input !pl-12'
+              />
 
-      <div className='mt-6 pt-6 border-t border-gray-300 dark:border-gray-600'>
-        <p className='text-sm'>
-          Already have an account?{' '}
+              <FaEnvelope className='absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none' />
+            </div>
+          </div>
+
+          {/* Password */}
+          <div className='space-y-1.5'>
+            <label
+              htmlFor='password'
+              className='text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500'
+            >
+              Password
+            </label>
+
+            <div className='relative flex items-center'>
+              <input
+                id='password'
+                type='password'
+                placeholder='••••••••'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className='premium-input !pl-12'
+              />
+
+              <FaLock className='absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none' />
+            </div>
+          </div>
+
+          {/* Confirm Password */}
+          <div className='space-y-1.5'>
+            <label
+              htmlFor='confirmPassword'
+              className='text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500'
+            >
+              Confirm Password
+            </label>
+
+            <div className='relative flex items-center'>
+              <input
+                id='confirmPassword'
+                type='password'
+                placeholder='Confirm password'
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                className='premium-input !pl-12'
+              />
+
+              <FaLock className='absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none' />
+            </div>
+          </div>
+
+          {/* Submit Button */}
+          <button
+            disabled={isLoading}
+            type='submit'
+            className='premium-btn-primary w-full h-11 mt-2'
+          >
+            {isLoading ? (
+              <span className='inline-flex items-center gap-2'>
+                <span className='h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent' />
+                Creating Account...
+              </span>
+            ) : (
+              'Create Account'
+            )}
+          </button>
+
+          {isLoading && <Loader />}
+        </form>
+
+        {/* Footer */}
+        <div className='border-t border-slate-100 pt-4 text-center text-xs dark:border-slate-800/60'>
+          <span className='text-slate-400 dark:text-slate-500'>
+            Already have an account?
+          </span>{' '}
           <Link
             to={redirect ? `/login?redirect=${redirect}` : '/login'}
-            className='text-blue-600 dark:text-blue-400 hover:underline font-semibold'
+            className='font-semibold text-indigo-600 hover:underline dark:text-indigo-400'
           >
             Login
           </Link>
-        </p>
+        </div>
       </div>
-    </FormContainer>
+    </div>
   );
 };
 

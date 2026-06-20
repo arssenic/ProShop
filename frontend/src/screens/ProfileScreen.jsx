@@ -8,6 +8,7 @@ import { useProfileMutation } from '../slices/usersApiSlice';
 import { useGetMyOrdersQuery } from '../slices/ordersApiSlice';
 import { setCredentials } from '../slices/authSlice';
 import { Link } from 'react-router-dom';
+import {FaUser,FaEnvelope,FaLock,FaUserCircle,FaBoxOpen,} from 'react-icons/fa';
 
 const ProfileScreen = () => {
   const [name, setName] = useState('');
@@ -48,135 +49,207 @@ const ProfileScreen = () => {
   };
 
   return (
-    <div className='profile-screen space-y-8'>
-      <div className='profile-hero grid gap-6 md:grid-cols-[360px_1fr]'>
-        <div className='profile-panel card p-6'>
-          <div className='profile-panel__header mb-6'>
-            <h2 className='text-2xl font-semibold mb-2'>User Profile</h2>
-            <p className='text-sm text-slate-500 dark:text-slate-400'>Update your account details and manage your preferences.</p>
+  <div className="relative min-h-[70vh] px-4 py-10 overflow-hidden">
+    {/* Ambient Glow */}
+    <div className="absolute top-1/4 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none dark:bg-indigo-500/5" />
+
+    <div className="max-w-7xl mx-auto grid lg:grid-cols-[380px_1fr] gap-6 relative z-10">
+      
+      {/* PROFILE CARD */}
+      <div className="premium-card">
+        <div className="text-center mb-6">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-600 text-white shadow-md shadow-indigo-500/20">
+            <FaUserCircle />
           </div>
 
-          <Form onSubmit={submitHandler} className='space-y-4'>
-            <Form.Group className='form-group' controlId='name'>
-              <Form.Label className='form-label'>Name</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='Enter name'
+          <h2 className="text-2xl font-bold mt-3">
+            User Profile
+          </h2>
+
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            Update your account information
+          </p>
+        </div>
+
+        <form onSubmit={submitHandler} className="space-y-4">
+          
+          {/* Name */}
+          <div>
+            <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+              Name
+            </label>
+
+            <div className="relative flex items-center mt-1">
+              <input
+                type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className='input-field'
-              ></Form.Control>
-            </Form.Group>
+                className="premium-input !pl-12"
+              />
 
-            <Form.Group className='form-group' controlId='email'>
-              <Form.Label className='form-label'>Email Address</Form.Label>
-              <Form.Control
-                type='email'
-                placeholder='Enter email'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className='input-field'
-              ></Form.Control>
-            </Form.Group>
-
-            <Form.Group className='form-group' controlId='password'>
-              <Form.Label className='form-label'>Password</Form.Label>
-              <Form.Control
-                type='password'
-                placeholder='Enter password'
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className='input-field'
-              ></Form.Control>
-            </Form.Group>
-
-            <Form.Group className='form-group' controlId='confirmPassword'>
-              <Form.Label className='form-label'>Confirm Password</Form.Label>
-              <Form.Control
-                type='password'
-                placeholder='Confirm password'
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className='input-field'
-              ></Form.Control>
-            </Form.Group>
-
-            <div className='flex items-center gap-4'>
-              <Button type='submit' className='btn-primary w-full'>
-                Update Profile
-              </Button>
-              {loadingUpdateProfile && <Loader />}
+              <FaUser className="absolute left-4 text-slate-400" />
             </div>
-          </Form>
-        </div>
-
-        <div className='order-panel card p-6'>
-          <div className='order-panel__header mb-6'>
-            <h2 className='text-2xl font-semibold mb-2'>My Orders</h2>
-            <p className='text-sm text-slate-500 dark:text-slate-400'>Track your recent purchases and view order details.</p>
           </div>
 
-          {isLoading ? (
-            <Loader />
-          ) : error ? (
-            <Message variant='danger'>
-              {error?.data?.message || error.error}
-            </Message>
-          ) : orders.length === 0 ? (
-            <Message>No orders found yet.</Message>
-          ) : (
-            <div className='overflow-x-auto'>
-              <Table striped hover responsive className='table-sm overflow-hidden rounded-2xl'>
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>DATE</th>
-                    <th>TOTAL</th>
-                    <th>PAID</th>
-                    <th>DELIVERED</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {orders.map((order) => (
-                    <tr key={order._id} className='border-b border-slate-200 dark:border-slate-700'>
-                      <td className='font-medium text-slate-700 dark:text-slate-200'>{order._id.substring(order._id.length - 8)}</td>
-                      <td>{order.createdAt.substring(0, 10)}</td>
-                      <td>${order.totalPrice.toFixed(2)}</td>
-                      <td>
-                        {order.isPaid ? (
-                          <span className='status-badge status-paid'>Paid</span>
-                        ) : (
-                          <span className='status-badge status-pending'>Pending</span>
-                        )}
-                      </td>
-                      <td>
-                        {order.isDelivered ? (
-                          <span className='status-badge status-paid'>Delivered</span>
-                        ) : (
-                          <span className='status-badge status-pending'>Pending</span>
-                        )}
-                      </td>
-                      <td>
-                        <Button
-                          as={Link}
-                          to={`/order/${order._id}`}
-                          variant='outline-primary'
-                          className='btn-sm'
-                        >
-                          Details
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
+          {/* Email */}
+          <div>
+            <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+              Email Address
+            </label>
+
+            <div className="relative flex items-center mt-1">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="premium-input !pl-12"
+              />
+
+              <FaEnvelope className="absolute left-4 text-slate-400" />
             </div>
-          )}
+          </div>
+
+          {/* Password */}
+          <div>
+            <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+              Password
+            </label>
+
+            <div className="relative flex items-center mt-1">
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                className="premium-input !pl-12"
+              />
+
+              <FaLock className="absolute left-4 text-slate-400" />
+            </div>
+          </div>
+
+          {/* Confirm Password */}
+          <div>
+            <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+              Confirm Password
+            </label>
+
+            <div className="relative flex items-center mt-1">
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="••••••••"
+                className="premium-input !pl-12"
+              />
+
+              <FaLock className="absolute left-4 text-slate-400" />
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            className="premium-btn-primary w-full h-11"
+          >
+            Update Profile
+          </button>
+
+          {loadingUpdateProfile && <Loader />}
+        </form>
+      </div>
+
+      {/* ORDERS CARD */}
+      <div className="premium-card">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-100 dark:bg-indigo-500/10">
+            <FaBoxOpen className="text-indigo-600" />
+          </div>
+
+          <div>
+            <h2 className="text-2xl font-bold">
+              My Orders
+            </h2>
+
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              Track and manage your purchases
+            </p>
+          </div>
         </div>
+
+        {isLoading ? (
+          <Loader />
+        ) : error ? (
+          <Message variant="danger">
+            {error?.data?.message || error.error}
+          </Message>
+        ) : orders.length === 0 ? (
+          <Message>No orders found.</Message>
+        ) : (
+          <div className="space-y-4">
+            {orders.map((order) => (
+              <div
+                key={order._id}
+                className="rounded-2xl border border-slate-200 dark:border-slate-700 p-4"
+              >
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  
+                  <div>
+                    <p className="font-semibold">
+                      #{order._id.slice(-8)}
+                    </p>
+
+                    <p className="text-sm text-slate-500">
+                      {order.createdAt.substring(0, 10)}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="font-semibold">
+                      ${order.totalPrice.toFixed(2)}
+                    </p>
+                  </div>
+
+                  <div className="flex gap-2 flex-wrap">
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-medium
+                      ${
+                        order.isPaid
+                          ? 'bg-green-100 text-green-700'
+                          : 'bg-yellow-100 text-yellow-700'
+                      }`}
+                    >
+                      {order.isPaid ? 'Paid' : 'Pending'}
+                    </span>
+
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-medium
+                      ${
+                        order.isDelivered
+                          ? 'bg-green-100 text-green-700'
+                          : 'bg-yellow-100 text-yellow-700'
+                      }`}
+                    >
+                      {order.isDelivered
+                        ? 'Delivered'
+                        : 'Pending'}
+                    </span>
+                  </div>
+
+                  <Link
+                    to={`/order/${order._id}`}
+                    className="premium-btn-primary px-4 py-2 text-sm h-auto w-auto"
+                  >
+                    Details
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default ProfileScreen;

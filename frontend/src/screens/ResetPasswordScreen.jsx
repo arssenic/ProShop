@@ -5,14 +5,28 @@ import { toast } from 'react-toastify';
 import Loader from '../components/Loader';
 import { useResetPasswordMutation } from '../slices/usersApiSlice';
 
-import { FaLock, FaKey } from 'react-icons/fa';
+import {
+  FaLock,
+  FaKey,
+  FaEye,
+  FaEyeSlash,
+} from 'react-icons/fa';
 
 const ResetPasswordScreen = () => {
   const { token } = useParams();
   const navigate = useNavigate();
 
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] =
+    useState('');
+
+  const [showPassword, setShowPassword] =
+    useState(false);
+
+  const [
+    showConfirmPassword,
+    setShowConfirmPassword,
+  ] = useState(false);
 
   const [resetPassword, { isLoading }] =
     useResetPasswordMutation();
@@ -43,7 +57,7 @@ const ResetPasswordScreen = () => {
 
       toast.success(
         res.message ||
-          'Password reset successfully'
+          'Password reset successfully. Redirecting...'
       );
 
       setPassword('');
@@ -51,7 +65,7 @@ const ResetPasswordScreen = () => {
 
       setTimeout(() => {
         navigate('/login');
-      }, 1500);
+      }, 2000);
     } catch (err) {
       toast.error(
         err?.data?.message ||
@@ -66,7 +80,7 @@ const ResetPasswordScreen = () => {
       {/* Ambient Glow */}
       <div className='absolute top-1/4 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none dark:bg-indigo-500/5' />
 
-      <div className='premium-card w-full max-w-md space-y-6 border border-slate-200/60 dark:border-slate-800/60'>
+      <div className='premium-card w-full max-w-sm space-y-6 border border-slate-200/60 dark:border-slate-800/60'>
         {/* Header */}
         <div className='text-center space-y-2'>
           <div className='mx-auto flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-600 text-white shadow-md shadow-indigo-500/20'>
@@ -74,11 +88,20 @@ const ResetPasswordScreen = () => {
           </div>
 
           <h2 className='text-2xl font-bold tracking-tight text-slate-900 dark:text-white'>
-            Reset Password
+            Create New Password
           </h2>
 
           <p className='text-xs text-slate-400 dark:text-slate-500'>
-            Create a new secure password for your account
+            Choose a strong password to secure your
+            account
+          </p>
+        </div>
+
+        {/* Password Requirements */}
+        <div className='rounded-xl bg-slate-50 dark:bg-slate-800/50 p-3 border border-slate-200 dark:border-slate-700'>
+          <p className='text-xs text-slate-500 dark:text-slate-400'>
+            Password must contain at least 6
+            characters.
           </p>
         </div>
 
@@ -87,7 +110,7 @@ const ResetPasswordScreen = () => {
           onSubmit={submitHandler}
           className='space-y-4'
         >
-          {/* New Password */}
+          {/* Password */}
           <div className='space-y-1.5'>
             <label
               htmlFor='password'
@@ -99,17 +122,35 @@ const ResetPasswordScreen = () => {
             <div className='relative flex items-center'>
               <input
                 id='password'
-                type='password'
+                type={
+                  showPassword ? 'text' : 'password'
+                }
                 placeholder='••••••••'
                 value={password}
                 onChange={(e) =>
                   setPassword(e.target.value)
                 }
                 required
-                className='premium-input !pl-12'
+                className='premium-input !pl-12 !pr-12'
               />
 
               <FaLock className='absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none' />
+
+              <button
+                type='button'
+                onClick={() =>
+                  setShowPassword(
+                    !showPassword
+                  )
+                }
+                className='absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
+              >
+                {showPassword ? (
+                  <FaEyeSlash />
+                ) : (
+                  <FaEye />
+                )}
+              </button>
             </div>
           </div>
 
@@ -125,7 +166,11 @@ const ResetPasswordScreen = () => {
             <div className='relative flex items-center'>
               <input
                 id='confirmPassword'
-                type='password'
+                type={
+                  showConfirmPassword
+                    ? 'text'
+                    : 'password'
+                }
                 placeholder='••••••••'
                 value={confirmPassword}
                 onChange={(e) =>
@@ -134,14 +179,30 @@ const ResetPasswordScreen = () => {
                   )
                 }
                 required
-                className='premium-input !pl-12'
+                className='premium-input !pl-12 !pr-12'
               />
 
               <FaLock className='absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none' />
+
+              <button
+                type='button'
+                onClick={() =>
+                  setShowConfirmPassword(
+                    !showConfirmPassword
+                  )
+                }
+                className='absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
+              >
+                {showConfirmPassword ? (
+                  <FaEyeSlash />
+                ) : (
+                  <FaEye />
+                )}
+              </button>
             </div>
           </div>
 
-          {/* Submit Button */}
+          {/* Submit */}
           <button
             disabled={isLoading}
             type='submit'

@@ -7,19 +7,7 @@ import Paginate from '../components/Paginate';
 import ProductCarousel from '../components/ProductCarousel';
 import Meta from '../components/Meta';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  FaShoppingBag,
-  FaShippingFast,
-  FaLock,
-  FaHeadset,
-  FaBoxes,
-  FaTags,
-  FaArrowRight,
-  FaSearchMinus,
-  FaSlidersH,
-  FaSortAmountDown,
-  FaEyeSlash
-} from 'react-icons/fa';
+import {FaShoppingBag,FaShippingFast,FaLock,FaHeadset,FaBoxes,FaTags,FaArrowRight,FaSearchMinus,FaSlidersH,FaSortAmountDown,FaEyeSlash} from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 const HomeScreen = () => {

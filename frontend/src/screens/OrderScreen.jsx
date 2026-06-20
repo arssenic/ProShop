@@ -5,12 +5,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import {
-  useDeliverOrderMutation,
-  useGetOrderDetailsQuery,
-  useGetPaypalClientIdQuery,
-  usePayOrderMutation,
-} from '../slices/ordersApiSlice';
+import {useDeliverOrderMutation,useGetOrderDetailsQuery,useGetPaypalClientIdQuery,usePayOrderMutation} from '../slices/ordersApiSlice';
 
 const OrderScreen = () => {
   const { id: orderId } = useParams();

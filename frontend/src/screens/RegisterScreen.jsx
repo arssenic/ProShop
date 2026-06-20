@@ -2,18 +2,10 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-
 import { useRegisterMutation } from '../slices/usersApiSlice';
 import { setCredentials } from '../slices/authSlice';
-
 import Loader from '../components/Loader';
-
-import {
-  FaUser,
-  FaEnvelope,
-  FaLock,
-  FaUserPlus,
-} from 'react-icons/fa';
+import {FaUser,FaEnvelope,FaLock,FaUserPlus} from 'react-icons/fa';
 
 const RegisterScreen = () => {
   const [name, setName] = useState('');
